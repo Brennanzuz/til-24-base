@@ -23,5 +23,8 @@ RUN pip install -r requirements.txt
 # copy the rest of the files into the container
 COPY src .
 
+# Define environment variable
+ENV MODEL_PATH=/usr/src/app/models
+
 # start model service
 CMD uvicorn api_service:app --port 5004 --host 0.0.0.0
