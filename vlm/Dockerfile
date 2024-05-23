@@ -24,7 +24,7 @@ RUN pip install -r requirements.txt
 COPY src .
 
 # Define environment variable
-ENV MODEL_PATH=/usr/src/app/models
+ENV MODEL_PATH=/workspace/models
 
 # start model service
 CMD uvicorn api_service:app --port 5004 --host 0.0.0.0

@@ -17,7 +17,7 @@ class VLMManager:
     def __init__(self):
         # initialize the model here
         # Fetch the model directory from the environment variable
-        self.model_directory = os.getenv("MODEL_PATH", "/usr/src/app/models")
+        self.model_directory = os.getenv("MODEL_PATH", "./models")
         self.detr_model_filename = "detr_model.pth"  # Specify your model filename here
         self.clip_model_filename = "clip_model.pth"  # Specify your model filename here
 
