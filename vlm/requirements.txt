@@ -14,3 +14,8 @@ accelerate
 uvicorn[standard]
 pydantic
 timm
+jiwer
+rouge-score
+requests
+python-dotenv
+pandas
