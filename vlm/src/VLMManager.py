@@ -18,7 +18,7 @@ class VLMManager:
     def __init__(self):
         # initialize the model here
         # Fetch the model directory from the environment variable
-        self.model_directory = os.getenv("MODEL_PATH", Path("vlm/src/models").absolute())
+        self.model_directory = os.getenv("MODEL_PATH", Path("models").absolute())
         self.detr_model_filename = "detr_model.pth"  # Specify your model filename here
         self.clip_model_filename = "clip_model.pth"  # Specify your model filename here
 
@@ -37,6 +37,14 @@ class VLMManager:
         self.clip_processor = CLIPProcessor.from_pretrained(self.clip_model_path, device_map=self.device)
 
     def detect_objects(self, image):
+        """Detects objects in an image using DETR.
+
+        Args:
+            image (Image): The image to detect objects in.
+
+        Returns:
+            list: A list of bounding boxes for the detected objects.
+        """
         with torch.no_grad():
             inputs = self.detr_processor(images=image, return_tensors="pt").to(self.device)
             outputs = self.detr_model(**inputs)
@@ -48,6 +56,15 @@ class VLMManager:
 
 
     def object_images(self, image, boxes):
+        """Extracts images of objects from the original image.
+        
+        Args:
+            image (Image): The original image.
+            boxes (list): A list of bounding boxes for the objects.
+            
+        Returns:
+            list: A list of images of the objects.
+        """
         image_arr = np.array(image)
         all_images = []
         for box in boxes:
@@ -59,6 +76,15 @@ class VLMManager:
 
 
     def identify_target(self, query, images):
+        """Identifies the most similar object to the query.
+        
+        Args:
+            query (str): The text query.
+            images (list): A list of images of objects.
+            
+        Returns:
+            int: The index of the most similar object.
+        """
         inputs = self.clip_processor(
             text=[query], images=images, return_tensors="pt", padding=True
         ).to(self.device)
