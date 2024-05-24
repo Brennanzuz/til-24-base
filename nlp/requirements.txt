@@ -12,6 +12,7 @@ spacy==3.5.3
 sentence-transformers==2.2.2
 beautifulsoup4==4.11.2
 unstructured==0.5.3
+word2number
 tiktoken 
 fastapi
 uvicorn[standard]
