@@ -12,12 +12,13 @@ import io
 from PIL import Image
 import torch
 import os
+from pathlib import Path
 
 class VLMManager:
     def __init__(self):
         # initialize the model here
         # Fetch the model directory from the environment variable
-        self.model_directory = os.getenv("MODEL_PATH", "./models")
+        self.model_directory = os.getenv("MODEL_PATH", Path("vlm/src/models").absolute())
         self.detr_model_filename = "detr_model.pth"  # Specify your model filename here
         self.clip_model_filename = "clip_model.pth"  # Specify your model filename here
 
