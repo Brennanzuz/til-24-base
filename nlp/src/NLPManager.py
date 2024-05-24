@@ -48,11 +48,3 @@ class NLPManager:
 		except:
 			word_dict['HDG'] = '000'
 		return word_dict
-
-
-# eg4 = 'Control here, scramble interceptor jets. Head to heading three zero zero. Engage yellow commercial aircraft. Over.'
-# eg3 = 'Control to air defense turrets, we have a target consisting of a red, brown, and orange drone heading towards your location. Please deploy the drone catcher and intercept the target at heading zero three zero. Over.'
-# eg2 = 'Control Tower to turrets, deploy EMP on white and silver light aircraft, heading two four zero.'
-# eg1 = 'Control tower, target the green, white, and grey cargo aircraft at heading one two five, deploy surface-to-air missiles.'
-# eg0 = 'Engage the purple, blue, and grey drone at heading one zero five. Deploy anti-air artillery.'
-# print(NLPManager().qa(eg0))
