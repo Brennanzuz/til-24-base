@@ -17,7 +17,8 @@ TEAM_NAME = os.getenv("TEAM_NAME")
 TEAM_TRACK = os.getenv("TEAM_TRACK")
 
 def main():
-    input_dir = Path("inputs").absolute()
+    input_dir = Path("/home/neonu/OneDrive/Lecture notes/Semester 7/Brainhack/advanced")
+    # input_dir = Path("inputs").absolute()
     # input_dir = Path(f"../../{TEAM_TRACK}")
     # input_dir = Path(f"../../data/{TEAM_TRACK}/train")
     # results_dir = Path(f"/home/jupyter/{TEAM_NAME}")
