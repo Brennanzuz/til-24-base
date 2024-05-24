@@ -19,7 +19,7 @@ class NLPManager:
 	def qa(self, context: str) -> Dict[str, str]:
         # perform NLP question-answering
 		ans = self.recog(context)
-		return {"heading": f"{ans['HDG']}", "tool": f"d{ans['TOL']}", "target": f"{ans['TAR']}"}
+		return {"heading": f"{ans['HDG']}", "tool": f"{ans['TOL']}", "target": f"{ans['TAR']}"}
 
 	def recog(self, context:str):
 		ner_results = self.nlp(context)
