@@ -8,6 +8,12 @@ app = FastAPI()
 
 vlm_manager = VLMManager()
 
+def flatten(lst):
+    if not lst:
+        return lst
+    if type(lst[0]) == list and len(lst[0]) > 0:
+        return flatten(lst[0]) + flatten(lst[1:])
+    return lst[:1] + flatten(lst[1:])
 
 @app.get("/health")
 def health():
@@ -27,7 +33,12 @@ async def identify(instance: Request):
         # each is a dict with one key "b64" and the value as a b64 encoded string
         image_bytes = base64.b64decode(instance["b64"])
 
-        bbox = vlm_manager.identify(image_bytes, instance["caption"])
+        results = vlm_manager.identify(image_bytes, instance["caption"])
+        bbox = results["boxes"].tolist()
+        if bbox == []:
+            bbox = [0, 0, 0, 0]
+        else:
+            bbox = flatten(bbox)
         predictions.append(bbox)
 
     return {"predictions": predictions}

@@ -16,8 +16,8 @@ class VLMManager:
     def __init__(self):
         # initialize the model here
         # Fetch the model directory from the environment variable
-        self.model_directory = os.getenv("MODEL_PATH", Path("vlm/src/models").absolute()) # For local tests
-        # self.model_directory = os.getenv("MODEL_PATH", Path("models").absolute())
+        # self.model_directory = os.getenv("MODEL_PATH", Path("vlm/src/models").absolute()) # For local tests
+        self.model_directory = os.getenv("MODEL_PATH", Path("models").absolute())
         self.model_filename = "vlm_model.pth"  # Specify your model filename here
 
         # Full path to your model files
@@ -29,6 +29,14 @@ class VLMManager:
             self.model_path, device_map=self.device
         )
         self.processor = AutoProcessor.from_pretrained(self.model_path, device_map=self.device)
+
+    # def draw_bbox(self, image: bytes, bbox: List[int]) -> None:
+    #     label = prediction["label"]
+    #     score = prediction["score"]
+
+    #     xmin, ymin, xmax, ymax = bbox.values()
+    #     draw.rectangle((xmin, ymin, xmax, ymax), outline="red", width=1)
+    #     draw.text((xmin, ymin), f"{label}: {round(score,2)}", fill="white")
 
     def identify(self, image: bytes, caption: str) -> List[int]:
         # perform object detection with a vision-language model
@@ -45,5 +53,4 @@ class VLMManager:
                 outputs, threshold=0.1, target_sizes=target_sizes
             )[0]
 
-        bbox = results["boxes"].tolist()
-        return bbox
+        return results
