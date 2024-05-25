@@ -24,4 +24,11 @@ RUN pip install -r requirements.txt
 COPY src .
 
 # start model service
-CMD uvicorn api_service:app --port 5002 --host 0.0.0.0
+# CMD uvicorn api_service:app --port 5002 --host 0.0.0.0
+CMD ["uvicorn", "api_service:app", "--host", "0.0.0.0", "--port", "5002"]
+
+# docker build -t averagervctrainer-nlp .
+# docker run -p 5002:5002 --gpus all -d averagervctrainer-nlp
+# docker kill CONTAINER-ID
+# docker tag averagervctrainer-nlp asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-averagervctrainer/averagervctrainer-nlp:latest
+# docker push asia-southeast1-docker.pkg.dev/dsta-angelhack/repository-averagervctrainer/averagervctrainer-nlp:latest
