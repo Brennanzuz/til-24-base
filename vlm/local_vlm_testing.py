@@ -8,7 +8,9 @@ from pathlib import Path
 from scoring.vlm_eval import vlm_eval
 from dotenv import load_dotenv
 import os
-
+import io
+from PIL import Image
+from PIL import ImageDraw
 from src.VLMManager import VLMManager
 
 load_dotenv()
@@ -17,7 +19,8 @@ TEAM_NAME = os.getenv("TEAM_NAME")
 TEAM_TRACK = os.getenv("TEAM_TRACK")
 
 def main():
-    input_dir = Path("inputs").absolute()
+    input_dir = Path("/home/neonu/OneDrive/Lecture notes/Semester 7/Brainhack/advanced")
+    # input_dir = Path("inputs").absolute()
     # input_dir = Path(f"../../{TEAM_TRACK}")
     # input_dir = Path(f"../../data/{TEAM_TRACK}/train")
     # results_dir = Path(f"/home/jupyter/{TEAM_NAME}")
@@ -64,6 +67,13 @@ def main():
     )
     print(f"IoU@0.5: {eval_result}")
 
+def flatten(lst):
+    if not lst:
+        return lst
+    if type(lst[0]) == list and len(lst[0]) > 0:
+        return flatten(lst[0]) + flatten(lst[1:])
+    return lst[:1] + flatten(lst[1:])
+
 def identify(instance):
     """
     Performs Object Detection and Identification given an image frame and a text query.
@@ -71,15 +81,29 @@ def identify(instance):
     vlm_manager = VLMManager()
     # get base64 encoded string of image, convert back into bytes
     input_json = json.loads(instance)
-
+    image = Image.open(io.BytesIO(base64.b64decode(input_json["instances"][0]["b64"])))
+    draw = ImageDraw.Draw(image)
     predictions = []
     for instance in input_json["instances"]:
         # each is a dict with one key "b64" and the value as a b64 encoded string
         image_bytes = base64.b64decode(instance["b64"])
 
-        bbox = vlm_manager.identify(image_bytes, instance["caption"])
+        results = vlm_manager.identify(image_bytes, instance["caption"])
+        bbox = results["boxes"].tolist()
+        if bbox == []:
+            bbox = [0, 0, 0, 0]
+        else:
+            bbox = flatten(bbox)
         predictions.append(bbox)
-
+        
+        # Image preview
+        label = instance["caption"]
+        xmin, ymin, xmax, ymax = bbox
+        draw.rectangle((xmin, ymin, xmax, ymax), outline="red", width=1)
+        draw.text((xmin, ymin), f"{label}", fill="white")
+        
+    # Save image to folder
+    image.save(f"results/{input_json['instances'][0]['key']}.png")
     return {"predictions": predictions}
 
 def run_batched(
