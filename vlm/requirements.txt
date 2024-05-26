@@ -1,21 +1,41 @@
-fastapi
-gdown==4.5.1
-matplotlib>=3.2.2
-numpy>=1.18.5,<1.24.0
-PyYAML>=5.3.1
-opencv-python==4.5.5.64
-scipy>=1.4.1
-torch>=1.7.0,!=1.12.0
-torchvision>=0.8.1,!=0.13.0
-tqdm>=4.41.0
-protobuf<4.21.3
-transformers==4.37.0
-accelerate
-uvicorn[standard]
-pydantic
-timm
-jiwer
-rouge-score
-requests
-python-dotenv
+# fastapi
+# gdown==4.5.1
+# matplotlib>=3.2.2
+# numpy>=1.18.5,<1.24.0
+# PyYAML>=5.3.1
+# opencv-python==4.5.5.64
+# scipy>=1.4.1
+# torch>=1.7.0,!=1.12.0
+# torchvision>=0.8.1,!=0.13.0
+# tqdm>=4.41.0
+# protobuf<4.21.3
+# transformers==4.37.0
+# accelerate
+# uvicorn[standard]
+# pydantic
+# timm
+# jiwer
+# rouge-score
+# requests
+# python-dotenv
+# pandas
 pandas
+numpy
+seaborn
+ipykernel
+ipywidgets
+jupyterlab
+torch>=2.2.2
+torchvision>=0.17.2
+torchinfo
+transformers[torch]>=4.39.3
+datasets
+albumentations
+timm
+pycocotools #rcnn ft
+bitsandbytes
+accelerate
+trl # VLM training
+lmms-eval # VLM evaluation
+ultralytics
+torchmetrics
