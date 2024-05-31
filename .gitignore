@@ -166,3 +166,5 @@ cython_debug/
 
 # ignore .json files generated while doing gcloud things
 src/gcloud/*.json
+/vlm/src/owlvit-base-patch32_FT
+/vlm/src/local/custom_owl_vit_1
