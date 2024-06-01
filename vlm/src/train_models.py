@@ -1,4 +1,5 @@
 import torch
+from ultralytics import YOLO
 from PIL import Image
 from torch.utils.data import random_split
 from torchvision import datasets, models, transforms
@@ -10,52 +11,19 @@ from transformers import (
     AutoModelForZeroShotObjectDetection,
 )
 
-checkpoint = "google/owlvit-base-patch32"
-model = AutoModelForZeroShotObjectDetection.from_pretrained(checkpoint)
-processor = AutoProcessor.from_pretrained(checkpoint)
+# DETR
+detr_checkpoint = "yolov8n.pt"
+detr_model = YOLO(detr_checkpoint)
 
-model_path = "vlm_model.pth"
+# CLIP
+clip_checkpoint = "openai/clip-vit-base-patch32"
+clip_model = CLIPModel.from_pretrained(clip_checkpoint, force_download=True)
+clip_processor = CLIPProcessor.from_pretrained(clip_checkpoint, force_download=True)
 
-# # Data augmentation and normalization for training
-# # Just normalization for validation
-# dataset_transforms = {
-#     "train": transforms.Compose([
-#         Resize((256, 256), interpolation=InterpolationMode.BICUBIC),
-#         CenterCrop(224),
-#         ConvertImageDtype(torch.float),
-#         Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-#     ]),
-#     "val": transforms.Compose([
-#         Resize((256, 256), interpolation=InterpolationMode.BICUBIC),
-#         CenterCrop(224),
-#         ConvertImageDtype(torch.float),
-#         Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-#     ])
-# }
-
-# # Training
-# # load datasets, a folder of images, and a jsonl file with captions and bounding boxes
-# dataset = datasets.ImageFolder("../../../advanced/images")
-
-# num_train = len(dataset)
-# num_val = int(0.2 * num_train)
-# num_train -= num_val
-
-# train_subset, val_subset = random_split(dataset, [num_train, num_val])
-
-# train_subset.dataset.transform = dataset_transforms['train']
-# val_subset.dataset.transform = dataset_transforms['val']
-
-# dataloaders = {
-#     'train': torch.utils.data.DataLoader(train_subset.dataset, batch_size=4, shuffle=True, num_workers=4),
-#     'val': torch.utils.data.DataLoader(val_subset.dataset, batch_size=4, shuffle=False, num_workers=4)
-# }
-
-# dataset_sizes = {
-#     'train': num_train,
-#     'val': num_val
-# }
+clip_model_path = "clip_model.pth"
 
 # After training:
-model.save_pretrained(model_path)
-processor.save_pretrained(model_path)
+detr_model.save()
+
+clip_model.save_pretrained(clip_model_path)
+clip_processor.save_pretrained(clip_model_path)
