@@ -11,7 +11,7 @@ import os
 import io
 from PIL import Image
 from PIL import ImageDraw
-from src.VLMManager import VLMManager
+from vlm.src.VLMManager import VLMManager
 
 load_dotenv()
 
@@ -88,19 +88,18 @@ def identify(instance):
         # each is a dict with one key "b64" and the value as a b64 encoded string
         image_bytes = base64.b64decode(instance["b64"])
 
-        results = vlm_manager.identify(image_bytes, instance["caption"])
-        bbox = results["boxes"].tolist()
-        if bbox == []:
-            bbox = [0, 0, 0, 0]
-        else:
-            bbox = flatten(bbox)
-        predictions.append(bbox)
-        
-        # Image preview
         label = instance["caption"]
-        xmin, ymin, xmax, ymax = bbox
-        draw.rectangle((xmin, ymin, xmax, ymax), outline="red", width=1)
-        draw.text((xmin, ymin), f"{label}", fill="white")
+        results = vlm_manager.identify(image_bytes, instance["caption"])
+        boxes, scores, labels = results["boxes"], results["scores"], results["labels"]
+        for box, score, label in zip(boxes, scores, labels):
+            box = [round(i, 2) for i in box.tolist()]
+            print(f"Detected {label} with confidence {round(score.item(), 3)} at location {box}")
+            predictions.append(box)
+        
+            # Image preview
+            xmin, ymin, xmax, ymax = box
+            draw.rectangle((xmin, ymin, xmax, ymax), outline="red", width=1)
+            draw.text((xmin, ymin), f"{label}", fill="white")
         
     # Save image to folder
     image.save(f"results/{input_json['instances'][0]['key']}.png")

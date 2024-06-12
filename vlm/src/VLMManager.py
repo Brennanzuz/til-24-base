@@ -49,5 +49,15 @@ class VLMManager:
             results = self.processor.post_process_object_detection(
                 outputs, threshold=0.1, target_sizes=target_sizes
             )[0]
-
-        return results
+            boxes, scores, labels = results["boxes"], results["scores"], results["labels"]
+            highest_score = 0
+            best_box = [0.0, 0.0, 0.0, 0.0]
+            for box, score, label in zip(boxes, scores, labels):
+                box = [round(i, 2) for i in box.tolist()]
+                print(f"Detected {label} with confidence {round(score.item(), 3)} at location {box}")
+                if score > highest_score:
+                    highest_score = score
+                    best_box = box
+                    
+        print(f"Best box: {best_box} with score {highest_score}")
+        return best_box
